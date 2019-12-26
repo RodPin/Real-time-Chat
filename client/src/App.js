@@ -12,6 +12,9 @@ function App() {
 
   useEffect(() => {
     socket.on('receivedMessage', messageObj => pushMessageToArray(messageObj));
+    socket.on('previousMessages', messagesFromSocket => {
+      setMessages(messagesFromSocket);
+    });
   });
 
   function handleSubmit(e) {
@@ -28,12 +31,18 @@ function App() {
   }
 
   function pushMessageToArray(messageObj) {
-    setMessages([
-      ...messages,
-      <div class='message'>
-        <strong> {messageObj.author} </strong>: {messageObj.message}
-      </div>
-    ]);
+    setMessages([...messages, messageObj]);
+  }
+  function renderMessages() {
+    var aux = [];
+    messages.map(eachMsg => {
+      aux.push(
+        <div className='message'>
+          <strong> {eachMsg.author} </strong>: {eachMsg.message}
+        </div>
+      );
+    });
+    return aux;
   }
   return (
     <div style={{paddingTop: 50}}>
@@ -44,7 +53,7 @@ function App() {
           placeholder='Digite seu usuario'
           onChange={e => setUsername(e.target.value)}
         />
-        <div className='messages'>{messages}</div>
+        <div className='messages'>{renderMessages()}</div>
         <input type='text' name='message' placeholder='Digite sua mensagem' onChange={e => setMsg(e.target.value)} />
         <button type='submit'>Enviar</button>
       </form>

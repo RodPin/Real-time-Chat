@@ -12,6 +12,10 @@ const messages = [];
 io.on('connection', socket => {
   console.log('New client connected:' + socket.id);
 
+  //send all previous messages to the connected socket
+  socket.emit('previousMessages', messages);
+  console.log('previous messages:' + messages);
+
   socket.on('sendMessage', data => {
     messages.push(data);
 
