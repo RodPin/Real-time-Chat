@@ -7,13 +7,15 @@ const app = express();
 app.use(index);
 const server = http.createServer(app);
 const io = socketIo(server); // < Interesting!
-// const getApiAndEmit = 'TODO';
 
+const messages = [];
 io.on('connection', socket => {
   console.log('New client connected:' + socket.id);
+
   socket.on('sendMessage', data => {
-    console.log(data);
+    messages.push(data);
   });
+
   socket.on('disconnect', () => {
     console.log('Client disconnected');
   });

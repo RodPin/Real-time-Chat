@@ -8,6 +8,7 @@ function App() {
   const [socketIO, setSocketIO] = useState('');
   const [username, setUsername] = useState('');
   const [msg, setMsg] = useState('');
+  const [messages, setMessages] = useState([]);
 
   useEffect(() => {
     setSocketIO(io(ENDPOINT));
@@ -21,8 +22,18 @@ function App() {
         message: msg
       };
 
+      pushMessageToArray(messageObject);
       socketIO.emit('sendMessage', messageObject);
     }
+  }
+
+  function pushMessageToArray(messageObj) {
+    setMessages([
+      ...messages,
+      <div class='message'>
+        <strong> {messageObj.author} </strong>: {messageObj.message}
+      </div>
+    ]);
   }
 
   return (
@@ -34,7 +45,7 @@ function App() {
           placeholder='Digite seu usuario'
           onChange={e => setUsername(e.target.value)}
         />
-        <div className='messages'></div>
+        <div className='messages'>{messages}</div>
         <input type='text' name='message' placeholder='Digite sua mensagem' onChange={e => setMsg(e.target.value)} />
         <button type='submit'>Enviar</button>
       </form>
