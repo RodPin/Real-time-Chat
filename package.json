@@ -1,0 +1,13 @@
+{
+  "name": "socketTemperature",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "install": "cd server && yarn && cd .. && cd client && yarn && cd ..",
+    "start": "concurrently \"cd server && node server.js\" \"cd client && yarn start\""
+  },
+  "dependencies": {
+    "concurrently": "^5.0.2"
+  }
+}
