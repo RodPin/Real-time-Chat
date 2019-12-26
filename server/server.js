@@ -14,6 +14,9 @@ io.on('connection', socket => {
 
   socket.on('sendMessage', data => {
     messages.push(data);
+
+    //broadcast emite para todos os sockets conectados
+    socket.broadcast.emit('receivedMessage', data);
   });
 
   socket.on('disconnect', () => {
