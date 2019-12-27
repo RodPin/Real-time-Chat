@@ -14,13 +14,17 @@ io.on('connection', socket => {
 
   //send all previous messages to the connected socket
   socket.emit('previousMessages', messages);
-  console.log('previous messages:' + messages);
+
+  socket.on('typing', userTyping => {
+    socket.broadcast.emit('usertyping', userTyping);
+  });
 
   socket.on('sendMessage', data => {
     messages.push(data);
 
     //broadcast emite para todos os sockets conectados
     socket.broadcast.emit('receivedMessage', data);
+    socket.broadcast.emit('usertyping', null);
   });
 
   socket.on('disconnect', () => {

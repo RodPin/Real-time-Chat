@@ -9,11 +9,15 @@ function App() {
   const [username, setUsername] = useState('');
   const [msg, setMsg] = useState('');
   const [messages, setMessages] = useState([]);
+  const [userTyping, setUserTyping] = useState('');
 
   useEffect(() => {
     socket.on('receivedMessage', messageObj => pushMessageToArray(messageObj));
     socket.on('previousMessages', messagesFromSocket => {
       setMessages(messagesFromSocket);
+    });
+    socket.on('usertyping', userT => {
+      setUserTyping(userT);
     });
   });
 
@@ -25,6 +29,7 @@ function App() {
         message: msg
       };
 
+      setMsg('');
       pushMessageToArray(messageObject);
       socket.emit('sendMessage', messageObject);
     }
@@ -44,17 +49,36 @@ function App() {
     });
     return aux;
   }
+
+  function typeMessage(e) {
+    const mes = e.target.value;
+
+    socket.emit('typing', mes.length > 0 && username ? username : null);
+    setMsg(mes);
+  }
+
   return (
     <div style={{paddingTop: 50}}>
       <form id='chat' onSubmit={e => handleSubmit(e)}>
         <input
           type='text'
           name='username'
+          value={username}
           placeholder='Digite seu usuario'
           onChange={e => setUsername(e.target.value)}
         />
-        <div className='messages'>{renderMessages()}</div>
-        <input type='text' name='message' placeholder='Digite sua mensagem' onChange={e => setMsg(e.target.value)} />
+        <div className='messages'>
+          <div>{renderMessages()}</div>
+          {userTyping && <p style={{}}>{userTyping + ' is typing...'}</p>}
+        </div>
+        <input
+          value={msg}
+          type='text'
+          name='message'
+          placeholder='Digite sua mensagem'
+          onChange={e => typeMessage(e)}
+        />
+
         <button type='submit'>Enviar</button>
       </form>
     </div>
