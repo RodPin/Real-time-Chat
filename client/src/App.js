@@ -64,7 +64,7 @@ function App() {
           type='text'
           name='username'
           value={username}
-          placeholder='Digite seu usuario'
+          placeholder='Username'
           onChange={e => setUsername(e.target.value)}
         />
         <div className='messages'>
@@ -75,11 +75,12 @@ function App() {
           value={msg}
           type='text'
           name='message'
-          placeholder='Digite sua mensagem'
+          disabled={!username}
+          placeholder={'Type your message' + (!username ? " (What's your Username?)" : '')}
           onChange={e => typeMessage(e)}
         />
 
-        <button type='submit'>Enviar</button>
+        <button type='submit'>Submit</button>
       </form>
     </div>
   );
