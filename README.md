@@ -1,5 +1,5 @@
 # Real-time-Chat
-Using React.js and Socket.io
+Using React.js,React Native and Socket.io
 
 
 ## Requirements:
@@ -17,6 +17,22 @@ Using React.js and Socket.io
 At the project directory
 ``` yarn install```
 
-### Runing
+### Runing on Web
 
 At the project directory ``` yarn start```
+
+### Runing on Mobile
+
+To run it locally on an emulator you have to map it port with the computer one
+
+``` adb reverse tcp:4001 tcp:4001```
+
+
+First run the server at the root directory
+``` yarn start```
+
+then
+``` cd mobile```
+
+``` yarn && react-native run-android```
+
