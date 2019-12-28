@@ -20,6 +20,7 @@ io.on('connection', socket => {
   });
 
   socket.on('sendMessage', data => {
+    console.log(data);
     messages.push(data);
 
     //broadcast emite para todos os sockets conectados
