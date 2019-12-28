@@ -3,7 +3,7 @@ import {Text, Button, TextInput, View} from 'react-native';
 import io from 'socket.io-client';
 
 const BORDERPROPS = {borderWidth: 1, borderColor: 'grey'};
-//comando para emulador funcionar ouvindo porta do computador:
+//Map emulator port with pc port
 //adb reverse tcp:4001 tcp:4001
 const ENDPOINT = 'http://127.0.0.1:4001';
 const socket = io(ENDPOINT);
