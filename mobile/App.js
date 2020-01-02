@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {Text, Button, TextInput, View} from 'react-native';
+import React, {useState, useEffect, useRef} from 'react';
+import {Text, Button, TextInput, View, ScrollView} from 'react-native';
 import io from 'socket.io-client';
 
 const BORDERPROPS = {borderWidth: 1, borderColor: 'grey'};
@@ -13,7 +13,7 @@ export default function App() {
   const [msg, setMsg] = useState('');
   const [messages, setMessages] = useState([]);
   const [userTyping, setUserTyping] = useState('');
-
+  var scrollViewRef = useRef();
   useEffect(() => {
     socket.on('receivedMessage', messageObj => pushMessageToArray(messageObj));
     socket.on('previousMessages', messagesFromSocket => {
@@ -46,7 +46,9 @@ export default function App() {
     messages.map(eachMsg => {
       aux.push(
         <Text>
-          <Text style={{color: 'black', fontSize: 20}}> {eachMsg.author} </Text>
+          <Text style={{color: 'black', fontSize: 20, padding: 5}}>
+            {eachMsg.author}{' '}
+          </Text>
           :{eachMsg.message}
         </Text>,
       );
@@ -59,6 +61,12 @@ export default function App() {
     setMsg(mes);
   }
 
+  function onFocusTxtInput() {
+    setTimeout(() => {
+      scrollViewRef.current.scrollToEnd({animated: true});
+    }, 50);
+  }
+
   return (
     <View style={{padding: 10, flex: 1}}>
       <TextInput
@@ -67,23 +75,33 @@ export default function App() {
         onChangeText={text => setUsername(text)}
         style={BORDERPROPS}
       />
-      <View
+      <ScrollView
         style={{
           marginVertical: 10,
-          justifyContent: 'space-between',
-          height: 300,
-          ...BORDERPROPS,
+          flex: 0.8,
+        }}
+        ref={scrollViewRef}
+        onContentSizeChange={(contentWidth, contentHeight) => {
+          scrollViewRef.current.scrollToEnd({animated: true});
+          // console.log(scrollViewRef);
         }}>
-        <View>{renderMessages()}</View>
+        {renderMessages()}
+      </ScrollView>
+      <View
+        style={{
+          bottom: 0,
+          padding: 10,
+          width: 400,
+          backgroundColor: 'white',
+        }}>
         {userTyping ? <Text>{userTyping} is typing...</Text> : null}
-      </View>
-      <View style={{position: 'absolute', bottom: 0, padding: 10, width: 400}}>
         <TextInput
           placeholder={
             'Type your message' + (!username ? " (What's your Username?)" : '')
           }
           value={msg}
           onChangeText={text => typeMessage(text)}
+          onFocus={() => onFocusTxtInput()}
           style={{marginBottom: 10, ...BORDERPROPS}}
         />
         <Button
