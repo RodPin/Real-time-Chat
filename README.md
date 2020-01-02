@@ -23,7 +23,7 @@ At the project directory ``` yarn start```
 
 ### Runing on Mobile
 
-To run it locally on an emulator you have to map it port with the computer one
+Everytime you use the run-android/run-ios command you need to map the emulator port port with the computer one
 
 ``` adb reverse tcp:4001 tcp:4001```
 
